@@ -21,13 +21,10 @@ class Player:
     def setExpulsion(self):
         self.situation = 'EXPULSO'
 
-def readList(list, title, withIndex):
+def readList(list, title):
     print(title)
     for index, item in enumerate(list):
-        if withIndex:
-            print(f'{index+1}) {item.showInfo()}')
-        else:
-            print(item.showInfo())
+        print(f'{index+1}) {item.showInfo()}')
 
 
 def generatePlayerByInfoArr(infoArr):
@@ -69,7 +66,7 @@ def selectPlayers(playersList, selectedPlayersList, reservedPlayersList):
             print(f'Selecione os jogadores para jogar a partida:\n')
             print(f'Jogadores disponiveis:')
 
-            readList(playersOptions, 'Jogadores disponiveis', True)
+            readList(playersOptions, 'Jogadores disponiveis')
 
             selectedIndex = int(input('Selecione um jogador:')) - 1
             selectedPlayer = playersOptions[selectedIndex]
@@ -89,11 +86,11 @@ def substution(selectedPlayersList, reservedPlayersList):
     if len(selectedPlayersList) == 0 and len(reservedPlayersList) == 0:
         print('Voce primeiro tem que escalar o time.\nSelecione a segunda opcao do menu')
     else:
-        readList(selectedPlayersList, 'Jogadores em campo:', True)
+        readList(selectedPlayersList, 'Jogadores em campo:')
 
         oldPlayerIndex = int(input('Selecione um jogador para substituir:')) - 1
 
-        readList(reservedPlayersList, 'Jogadores no banco:', True)
+        readList(reservedPlayersList, 'Jogadores no banco:')
 
         newPlayerIndex = int(input('Selecione um jogador para entrar em campo:')) - 1
 
@@ -115,7 +112,7 @@ def expulsion(selectedPlayersList, reservedPlayersList):
     if len(selectedPlayersList) == 0 and len(reservedPlayersList) == 0:
         print('Voce primeiro tem que escalar o time.\nSelecione a segunda opcao do menu')
     else: 
-        readList(selectedPlayersList, 'Jogadores em campo:', True)
+        readList(selectedPlayersList, 'Jogadores em campo:')
 
         playerIndex = int(input('Selecione o jogador que sera expulso: ')) - 1
         player = selectedPlayersList[playerIndex]
