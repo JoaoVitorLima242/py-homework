@@ -136,38 +136,38 @@ def savePlayerInFile(playersList, selectedPlayersList, reservedPlayersList):
 
         textToFile.append('=== RESUMO DA PARTIDA ===\n')
 
-        textToFile.append('*** Todos os jogadores ***\n')
+        textToFile.append('+++ Todos os jogadores +++\n')
         for player in playersList:
-            textToFile.append(f'- {player.showInfo()}\n')
+            textToFile.append(f'* {player.showInfo()}\n')
 
         textToFile.append('\n')
         
-        textToFile.append('*** Jogadores que terminaram o jogo escalado ***\n')
+        textToFile.append('+++ Jogadores que terminaram o jogo escalado +++\n')
         for player in selectedPlayersList:
-            textToFile.append(f'- {player.showInfo()}\n')
+            textToFile.append(f'* {player.showInfo()}\n')
         
         textToFile.append('\n')
         
-        textToFile.append('*** Jogadores que participaram do jogo ***\n')
+        textToFile.append('+++ Jogadores que participaram do jogo +++\n')
         for player in selectedPlayersList:
-            textToFile.append(f'- {player.showInfo()}\n')
+            textToFile.append(f'* {player.showInfo()}\n')
         for player in reservedPlayersList:
             if player.getParticipation():
-                textToFile.append(f'- {player.showInfo()}\n')
+                textToFile.append(f'* {player.showInfo()}\n')
 
         textToFile.append('\n')
 
-        textToFile.append('*** Jogadores que foram expulsos ***\n')
+        textToFile.append('+++ Jogadores que foram expulsos +++\n')
         for player in reservedPlayersList:
             if player.hasSendOff():
-                textToFile.append(f'- {player.showInfo()}\n')
+                textToFile.append(f'* {player.showInfo()}\n')
 
         textToFile.append('\n')
 
-        textToFile.append('*** Jogadores que foram para o banco de reserva ***\n')
+        textToFile.append('+++ Jogadores que foram para o banco de reserva +++\n')
         for player in reservedPlayersList:
             if player.getParticipation():
-                textToFile.append(f'- {player.showInfo()}\n')
+                textToFile.append(f'* {player.showInfo()}\n')
 
         file.writelines(textToFile)
         print('O resumo da partida foi salvo dentro do arquivo "todosjogadores.txt"!')
