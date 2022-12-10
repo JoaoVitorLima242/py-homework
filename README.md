@@ -1,6 +1,8 @@
 # py-homework
+
 Faça um algoritmo que utilize o menu abaixo:
 
+```
 MENU
 ======
 1- Ler arquivo de jogadores
@@ -8,7 +10,8 @@ MENU
 3- Realizar Substiuição
 4- Expulsão
 5- Imprimir escalação
-Escolha: 
+Escolha:
+```
 
 
 - Opção 1: Ler de um arquivo texto todos os jogadores
@@ -40,15 +43,6 @@ Escolha:
         participaram do jogo, inclusive as substituições
         e expulsões. 
         Salve esses dados em um arquivo (todosjogadores.txt)
-
-
-class Jogador:
-    def __init__(self, nome, numero, posicao):
-        self.__numero = numero
-        self.__nome_jogador = nome
-        self.__posicao = posicao # GOLEIRO ou DEFESA ou MEIO-CAMPO ou ATECANTE
-        self.__situacao = "NORMAL"  # ou "EXPULSO"
-        self.__participou_partida = False # ou True
 
 
 arquivo texto para leitura (convocados.txt):
