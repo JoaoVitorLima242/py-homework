@@ -9,6 +9,12 @@ class Player:
     def showInfo(self):
         return f'Camisa {self.number} - {self.name} | {self.position}'
 
+    def hasSendOff(self):
+        return bool(self.situation == 'EXPULSO')
+
+    def getParticipation(self):
+        return self.participate_in_game
+
     def setPlayerParticipation(self, value):
         self.participate_in_game = value
 
@@ -74,6 +80,10 @@ def selectPlayers(playersList, selectedPlayersList, reservedPlayersList):
         
         for player in playersOptions:
             reservedPlayersList.append(player)
+        
+
+        print('Time escalado com sucesso!')
+
 
 def substution(selectedPlayersList, reservedPlayersList):
     if len(selectedPlayersList) == 0 and len(reservedPlayersList) == 0:
@@ -98,6 +108,9 @@ def substution(selectedPlayersList, reservedPlayersList):
         reservedPlayersList.pop(newPlayerIndex)
         reservedPlayersList.insert(newPlayerIndex, oldPlayer)
 
+        print('Substituição feita com sucesso!')
+
+
 def expulsion(selectedPlayersList, reservedPlayersList): 
     if len(selectedPlayersList) == 0 and len(reservedPlayersList) == 0:
         print('Voce primeiro tem que escalar o time.\nSelecione a segunda opcao do menu')
@@ -112,8 +125,69 @@ def expulsion(selectedPlayersList, reservedPlayersList):
         selectedPlayersList.pop(playerIndex)
         reservedPlayersList.append(player)
 
+        print('Expulsão feita com sucesso!')
+
+def savePlayerInFile(playersList, selectedPlayersList, reservedPlayersList):
+    if len(selectedPlayersList) == 0 and len(reservedPlayersList) == 0:
+        print('Voce primeiro tem que escalar o time.\nSelecione a segunda opcao do menu')
+    else: 
+        file = open("todosjogadores.txt", "a")
+        textToFile = []
+
+        textToFile.append('=== RESUMO DA PARTIDA ===\n')
+
+        textToFile.append('*** Todos os jogadores ***\n')
+        for player in playersList:
+            textToFile.append(f'- {player.showInfo()}\n')
+
+        textToFile.append('\n')
+        
+        textToFile.append('*** Jogadores que terminaram o jogo escalado ***\n')
+        for player in selectedPlayersList:
+            textToFile.append(f'- {player.showInfo()}\n')
+        
+        textToFile.append('\n')
+        
+        textToFile.append('*** Jogadores que participaram do jogo ***\n')
+        for player in selectedPlayersList:
+            textToFile.append(f'- {player.showInfo()}\n')
+        for player in reservedPlayersList:
+            if player.getParticipation():
+                textToFile.append(f'- {player.showInfo()}\n')
+
+        textToFile.append('\n')
+
+        textToFile.append('*** Jogadores que foram expulsos ***\n')
+        for player in reservedPlayersList:
+            if player.hasSendOff():
+                textToFile.append(f'- {player.showInfo()}\n')
+
+        textToFile.append('\n')
+
+        textToFile.append('*** Jogadores que foram para o banco de reserva ***\n')
+        for player in reservedPlayersList:
+            if player.getParticipation():
+                textToFile.append(f'- {player.showInfo()}\n')
+
+        file.writelines(textToFile)
+        print('O resumo da partida foi salvo dentro do arquivo "todosjogadores.txt"!')
+        
 
 
+
+
+
+
+
+menu = '''
+MENU
+======
+1- Ler arquivo de jogadores
+2- Escalar time
+3- Realizar Substiuição
+4- Expulsão
+5- Imprimir escalação
+'''
 
 
 def init():
@@ -123,15 +197,7 @@ def init():
     reservedPlayers = []
 
     while option != 'fim':
-        print('''
-MENU
-======
-1- Ler arquivo de jogadores
-2- Escalar time
-3- Realizar Substiuição
-4- Expulsão
-5- Imprimir escalação
-''')
+        print(menu)
         option = input('Selecione uma opção do menu:')
         print('\n################################\n')
         if option == '1':
@@ -144,9 +210,7 @@ MENU
         elif option == '4':
             expulsion(selectedPlayers, reservedPlayers)
         elif option == '5':
-            readList(players, 'LISTA DE JOGADORES', False)
-            readList(selectedPlayers, 'LISTA DE JOGADORES ESCALADOS', False)
-            readList(reservedPlayers, 'LISTA DE JOGADORES RESERVA', False)
+            savePlayerInFile(players, selectedPlayers, reservedPlayers)
         elif option.lower() == 'fim':
             break
 
