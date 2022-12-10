@@ -2,19 +2,26 @@ class Player:
     def __init__(self, name, number, position):
         self.name = name
         self.number = number
-        self.position = position
-        self.played_in_game = False
+        self.position = position # GOLEIRO ou DEFESA ou MEIO-CAMPO ou ATECANTE
+        self.situation = "NORMAL"  # ou "EXPULSO"
+        self.participate_in_game = False # ou True
 
     def showInfo(self):
         return f'Camisa {self.number} - {self.name} | {self.position}'
 
     def setPlayerParticipation(self, value):
-        self.played_in_game = value
+        self.participate_in_game = value
 
-def readList(list, title):
+    def setExpulsion(self):
+        self.situation = 'EXPULSO'
+
+def readList(list, title, withIndex):
     print(title)
-    for item in list:
-        print(item.showInfo())
+    for index, item in enumerate(list):
+        if withIndex:
+            print(f'{index+1}) {item.showInfo()}')
+        else:
+            print(item.showInfo())
 
 
 def generatePlayerByInfoArr(infoArr):
@@ -56,17 +63,57 @@ def selectPlayers(playersList, selectedPlayersList, reservedPlayersList):
             print(f'Selecione os jogadores para jogar a partida:\n')
             print(f'Jogadores disponiveis:')
 
-            for index, player in enumerate(playersOptions):
-                print(f'{index+1}) {player.showInfo()}')
+            readList(playersOptions, 'Jogadores disponiveis', True)
 
             selectedIndex = int(input('Selecione um jogador:')) - 1
             selectedPlayer = playersOptions[selectedIndex]
-
+            
+            selectedPlayer.setPlayerParticipation(True)
             selectedPlayersList.append(selectedPlayer) 
             playersOptions.pop(selectedIndex)
         
         for player in playersOptions:
             reservedPlayersList.append(player)
+
+def substution(selectedPlayersList, reservedPlayersList):
+    if len(selectedPlayersList) == 0 and len(reservedPlayersList) == 0:
+        print('Voce primeiro tem que escalar o time.\nSelecione a segunda opcao do menu')
+    else:
+        readList(selectedPlayersList, 'Jogadores em campo:', True)
+
+        oldPlayerIndex = int(input('Selecione um jogador para substituir:')) - 1
+
+        readList(reservedPlayersList, 'Jogadores no banco:', True)
+
+        newPlayerIndex = int(input('Selecione um jogador para entrar em campo:')) - 1
+
+        oldPlayer = selectedPlayersList[oldPlayerIndex]
+        newPlayer = reservedPlayersList[newPlayerIndex]
+
+        newPlayer.setPlayerParticipation(True)
+
+        selectedPlayersList.pop(oldPlayerIndex)
+        selectedPlayersList.insert(oldPlayerIndex, newPlayer)
+        
+        reservedPlayersList.pop(newPlayerIndex)
+        reservedPlayersList.insert(newPlayerIndex, oldPlayer)
+
+def expulsion(selectedPlayersList, reservedPlayersList): 
+    if len(selectedPlayersList) == 0 and len(reservedPlayersList) == 0:
+        print('Voce primeiro tem que escalar o time.\nSelecione a segunda opcao do menu')
+    else: 
+        readList(selectedPlayersList, 'Jogadores em campo:', True)
+
+        playerIndex = int(input('Selecione o jogador que sera expulso: ')) - 1
+        player = selectedPlayersList[playerIndex]
+
+        player.setExpulsion()
+  
+        selectedPlayersList.pop(playerIndex)
+        reservedPlayersList.append(player)
+
+
+
 
 
 def init():
@@ -92,10 +139,14 @@ MENU
             pass
         elif option == '2':
             selectPlayers(players, selectedPlayers, reservedPlayers)
+        elif option == '3':
+            substution(selectedPlayers, reservedPlayers)
+        elif option == '4':
+            expulsion(selectedPlayers, reservedPlayers)
         elif option == '5':
-            readList(players, 'LISTA DE JOGADORES')
-            readList(selectedPlayers, 'LISTA DE JOGADORES ESCALADOS')
-            readList(reservedPlayers, 'LISTA DE JOGADORES RESERVA')
+            readList(players, 'LISTA DE JOGADORES', False)
+            readList(selectedPlayers, 'LISTA DE JOGADORES ESCALADOS', False)
+            readList(reservedPlayers, 'LISTA DE JOGADORES RESERVA', False)
         elif option.lower() == 'fim':
             break
 
